@@ -401,6 +401,9 @@ UPDATE group_accounts SET group_id = 4 WHERE account_id = 5;
 -- Question 12: Xóa tất cả các exam được tạo trước ngày 20/12/2019
 DELETE FROM exams WHERE created_at = '2025-08-10';
 
+-- Question 13:
+DELETE FROM questions WHERE content LIKE 'cauhoi%';
+
 -- 6: SELECT DỮ LIỆU KIỂM TRA
 -- Question 2: lấy ra tất cả các phòng ban
 SELECT * FROM departments;
@@ -408,16 +411,23 @@ SELECT * FROM departments;
 -- Question 3: lấy ra id của phòng ban "Lap1"
 SELECT id FROM departments WHERE name = 'Lap1';
 -- Question 4: lấy ra thông tin account có full name dài nhất
-
-SELECT * FROM accounts ORDER BY LENGTH(fullname) DESC LIMIT 1;
+SELECT *
+FROM accounts
+WHERE
+    LENGTH(username) = (
+        SELECT MAX(LENGTH(username))
+        FROM accounts
+    );
 
 -- Question 5: Lấy ra thông tin account có full name dài nhất và thuộc phòng ban có id = 3
 SELECT *
 FROM accounts
 WHERE
-    department_id = 3
-ORDER BY LENGTH(fullname) DESC
-LIMIT 1;
+    LENGTH(username) = (
+        SELECT MAX(LENGTH(username))
+        FROM accounts
+    )
+    AND department_id = 3;
 
 -- Question 6: Lấy ra tên group đã tham gia trước ngày 2025-08-20
 SELECT name FROM `groups` WHERE created_at < '2025-08-20';
